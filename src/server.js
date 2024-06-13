@@ -1,10 +1,12 @@
 import express from "express";
+import cors from "cors";
 import morgan from "morgan";
 import enrutadorUsers from "./routes/userRouter.js";
 import enrutadorLogin from "./routes/loginRouter.js";
 
 const server = express ();
 
+server.use(cors());
 server.use(express.json());
 server.use(morgan("dev")) ;
 server.use("/users", enrutadorUsers);
