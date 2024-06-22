@@ -1,33 +1,24 @@
 import bcrypt from "bcryptjs";
 import ModelsUser from "../models/modelsUser.js";
 
+
 const controllerUsers = {
   createUser: async (solicitud, respuesta) => {
     try {
-      if (solicitud.body.name === "") throw new Error("The name is missing!!");
-      if (solicitud.body.lastname === "")
-        throw new Error("The last name is missing!!");
-      if (solicitud.body.id === "") throw new Error("The id is missing!!");
-      if (solicitud.body.city === "") throw new Error("The city is missing!!");
-      if (solicitud.body.adress === "")
-        throw new Error("The adress is missing!!");
-      if (solicitud.body.phonenumber === "")
-        throw new Error("The phonenumber is missing!!");
-      if (solicitud.body.gender === "")
-        throw new Error("The gender is missing!!");
-      if (solicitud.body.email === "")
-        throw new Error("The email is missing!!");
-      if (solicitud.body.password === "")
-        throw new Error("The password is missing!!");
-
       //logica para crear el producto en la base de datos
-      const { name, email, password} = solicitud.body;
+      const  password  = solicitud.body.password;
       const passwordProtected = await bcrypt.hash(password, 10);
       const newUser = new ModelsUser({
-        name: name, 
-        email: email,
-        password: passwordProtected
+        name: solicitud.body.name,
+        lastName: solicitud.body.lastName,
+        id: solicitud.body.id,
+        city: solicitud.body.city,
+        phoneNumber: solicitud.body.phoneNumber,
+        gender: solicitud.body.gender,
+        email: solicitud.body.email,
+        password: passwordProtected,
       });
+
       const createdUser = await newUser.save();
       if (createdUser._id) {
         respuesta.json({
@@ -45,9 +36,9 @@ const controllerUsers = {
       });
     }
   },
-  readUser: async (solicitud, resouesta) => {
+  readUser: async (solicitud, respuesta) => {
     try {
-      const userFound = await ModeloUser.findByID(solicitud.params.id);
+      const userFound = await ModelsUser.findByID(solicitud.params.id);
       if (userFound._id) {
         respuesta.json({
           result: "Good!",
